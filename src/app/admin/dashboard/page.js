@@ -7,26 +7,27 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { collection, getDocs, addDoc, orderBy, query, deleteDoc, doc } from 'firebase/firestore';
 import { 
   LogOut, MessageSquare, Layout, Plus, Trash2, ExternalLink, 
-  Image as ImageIcon, Award, Map, Home 
+  Image as ImageIcon, Award, Map, FileQuestion 
 } from 'lucide-react';
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState('messages'); 
   
-  // Data States
+  // Data
   const [messages, setMessages] = useState([]);
   const [projects, setProjects] = useState([]);
   const [achievements, setAchievements] = useState([]);
   const [roadmap, setRoadmap] = useState([]);
+  const [requests, setRequests] = useState([]); // NEW: Certificate Requests
   
-  // Forms
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  // Forms States
   const [newProject, setNewProject] = useState({ title: '', desc: '', tech: '', link: '', imageUrl: '' });
   const [newAchieve, setNewAchieve] = useState({ title: '', issuer: '', year: '' });
   const [newGoal, setNewGoal] = useState({ title: '', org: '', year: '', status: 'future', desc: '' });
-
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -54,6 +55,9 @@ export default function Dashboard() {
       // Roadmap
       const roadSnap = await getDocs(collection(db, "roadmap"));
       setRoadmap(roadSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+      // NEW: Cert Requests
+      const reqSnap = await getDocs(query(collection(db, "cert_requests"), orderBy("timestamp", "desc")));
+      setRequests(reqSnap.docs.map(d => ({ id: d.id, ...d.data() })));
 
     } catch (error) {
       console.error("Error:", error);
@@ -69,14 +73,12 @@ export default function Dashboard() {
     setNewProject({ title: '', desc: '', tech: '', link: '', imageUrl: '' });
     fetchData();
   };
-
   const handleAddAchieve = async (e) => {
     e.preventDefault();
     await addDoc(collection(db, "achievements"), newAchieve);
     setNewAchieve({ title: '', issuer: '', year: '' });
     fetchData();
   };
-
   const handleAddGoal = async (e) => {
     e.preventDefault();
     await addDoc(collection(db, "roadmap"), newGoal);
@@ -108,9 +110,7 @@ export default function Dashboard() {
           <MenuBtn icon={<Layout size={20}/>} label="Projects" active={activeTab==='projects'} onClick={()=>setActiveTab('projects')} />
           <MenuBtn icon={<Award size={20}/>} label="Achievements" active={activeTab==='achievements'} onClick={()=>setActiveTab('achievements')} />
           <MenuBtn icon={<Map size={20}/>} label="Goals / Roadmap" active={activeTab==='roadmap'} onClick={()=>setActiveTab('roadmap')} />
-          <div className="pt-4 border-t border-white/10 mt-4">
-             <a href="/" target="_blank" className="flex items-center gap-3 px-4 py-3 hover:bg-white/10 rounded-lg text-sm"><ExternalLink size={18}/> View Live Site</a>
-          </div>
+          <MenuBtn icon={<FileQuestion size={20}/>} label="Cert Requests" active={activeTab==='requests'} onClick={()=>setActiveTab('requests')} />
         </nav>
         <button onClick={handleLogout} className="flex items-center gap-2 text-red-300 hover:text-white mt-6">
           <LogOut size={16} /> Logout
@@ -157,10 +157,10 @@ export default function Dashboard() {
         {activeTab === 'achievements' && (
           <div className="space-y-8">
             <div className="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-500">
-              <h3 className="font-bold mb-4 flex gap-2"><Plus/> Add Achievement (CDAC/MSO)</h3>
+              <h3 className="font-bold mb-4 flex gap-2"><Plus/> Add Achievement</h3>
               <form onSubmit={handleAddAchieve} className="grid gap-4">
-                <input className="p-3 border rounded" placeholder="Course/Certificate Name" value={newAchieve.title} onChange={e=>setNewAchieve({...newAchieve, title:e.target.value})} required />
-                <input className="p-3 border rounded" placeholder="Issuer (e.g., CDAC, Microsoft)" value={newAchieve.issuer} onChange={e=>setNewAchieve({...newAchieve, issuer:e.target.value})} required />
+                <input className="p-3 border rounded" placeholder="Course Name" value={newAchieve.title} onChange={e=>setNewAchieve({...newAchieve, title:e.target.value})} required />
+                <input className="p-3 border rounded" placeholder="Issuer" value={newAchieve.issuer} onChange={e=>setNewAchieve({...newAchieve, issuer:e.target.value})} required />
                 <input className="p-3 border rounded" placeholder="Year" value={newAchieve.year} onChange={e=>setNewAchieve({...newAchieve, year:e.target.value})} required />
                 <button className="bg-blue-600 text-white py-3 rounded font-bold">Add Achievement</button>
               </form>
@@ -171,28 +171,46 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* GOALS / ROADMAP */}
+        {/* GOALS */}
         {activeTab === 'roadmap' && (
            <div className="space-y-8">
            <div className="bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-500">
-             <h3 className="font-bold mb-4 flex gap-2"><Plus/> Add Goal (NIOS/CA)</h3>
+             <h3 className="font-bold mb-4 flex gap-2"><Plus/> Add Goal</h3>
              <form onSubmit={handleAddGoal} className="grid gap-4">
-               <input className="p-3 border rounded" placeholder="Goal Title (e.g., CA Foundation)" value={newGoal.title} onChange={e=>setNewGoal({...newGoal, title:e.target.value})} required />
-               <input className="p-3 border rounded" placeholder="Organization (e.g., ICAI)" value={newGoal.org} onChange={e=>setNewGoal({...newGoal, org:e.target.value})} required />
-               <input className="p-3 border rounded" placeholder="Year (e.g., 2026)" value={newGoal.year} onChange={e=>setNewGoal({...newGoal, year:e.target.value})} required />
+               <input className="p-3 border rounded" placeholder="Goal Title" value={newGoal.title} onChange={e=>setNewGoal({...newGoal, title:e.target.value})} required />
+               <input className="p-3 border rounded" placeholder="Organization" value={newGoal.org} onChange={e=>setNewGoal({...newGoal, org:e.target.value})} required />
+               <input className="p-3 border rounded" placeholder="Year" value={newGoal.year} onChange={e=>setNewGoal({...newGoal, year:e.target.value})} required />
                <select className="p-3 border rounded" value={newGoal.status} onChange={e=>setNewGoal({...newGoal, status:e.target.value})}>
-                  <option value="completed">Completed (Done)</option>
-                  <option value="current">In Progress (Doing)</option>
-                  <option value="future">Future (Target)</option>
+                  <option value="completed">Completed</option>
+                  <option value="current">In Progress</option>
+                  <option value="future">Future</option>
                </select>
-               <textarea className="p-3 border rounded" placeholder="Short Description" value={newGoal.desc} onChange={e=>setNewGoal({...newGoal, desc:e.target.value})} />
                <button className="bg-green-600 text-white py-3 rounded font-bold">Add to Roadmap</button>
              </form>
            </div>
            <div className="grid gap-4">
-              {roadmap.map(r => <ItemCard key={r.id} title={r.title} sub={`${r.status.toUpperCase()} • ${r.year}`} onDelete={()=>deleteItem('roadmap', r.id)} />)}
+              {roadmap.map(r => <ItemCard key={r.id} title={r.title} sub={`${r.status} • ${r.year}`} onDelete={()=>deleteItem('roadmap', r.id)} />)}
            </div>
          </div>
+        )}
+
+        {/* NEW: CERT REQUESTS TAB */}
+        {activeTab === 'requests' && (
+          <div>
+            <h2 className="text-2xl font-bold text-oxford mb-6">Certificate Requests ({requests.length})</h2>
+            {requests.length === 0 && <p className="text-slate-400">No requests yet.</p>}
+            {requests.map((req) => (
+              <div key={req.id} className="bg-white p-4 mb-4 rounded-xl shadow-sm border-l-4 border-gold flex justify-between items-center">
+                <div>
+                  <p className="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">Requested for:</p>
+                  <h3 className="font-bold text-lg text-oxford">{req.achievement}</h3>
+                  <p className="text-slate-600 mt-2 font-medium">Contact: <span className="text-blue-600">{req.contact}</span></p>
+                  <p className="text-xs text-slate-400 mt-2">{new Date(req.timestamp?.seconds * 1000).toLocaleString()}</p>
+                </div>
+                <button onClick={() => deleteItem('cert_requests', req.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2/></button>
+              </div>
+            ))}
+          </div>
         )}
 
       </main>
@@ -200,7 +218,6 @@ export default function Dashboard() {
   );
 }
 
-// Helper Components
 function MenuBtn({icon, label, active, onClick}) {
   return (
     <button onClick={onClick} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${active ? 'bg-gold text-oxford font-bold' : 'hover:bg-white/10'}`}>
