@@ -219,6 +219,7 @@ export default function Portfolio() {
             <a href="#achievements" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Achievements</a>
             <a href="#roadmap" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Goals</a>
             <a href="#projects" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Projects</a>
+            <a href="#insights" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Blogs</a>
             <a href="/admin" className="text-gold">Admin Panel</a>
           </div>
         )}
