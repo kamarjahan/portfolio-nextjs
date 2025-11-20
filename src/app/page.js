@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Download, Send, Linkedin, Github, Instagram, Mail, 
   ExternalLink, Code, CheckCircle, Loader2, Award, Menu, X, FileText, 
-  QrCode, XCircle, Moon, Sun 
+  QrCode, XCircle, Moon, Sun, Calendar
 } from 'lucide-react';
 
 import { db } from '../firebase'; 
@@ -304,6 +304,17 @@ export default function Portfolio() {
            <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-card p-6 rounded-xl text-oxford dark:text-white shadow-2xl space-y-4">
               <input name="name" value={formData.name} onChange={handleChange} required type="text" placeholder="Your Name" className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 outline-none focus:border-gold transition-all" />
               <input name="email" value={formData.email} onChange={handleChange} required type="email" placeholder="Your Email" className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 outline-none focus:border-gold transition-all" />
+              <a 
+  href="https://calendly.com/ztenkammu/30min" 
+  target="_blank" 
+  className="flex items-center gap-4 text-lg hover:text-gold transition-colors cursor-pointer mt-4"
+>
+  <div className="bg-gold/20 p-2 rounded-full text-gold">
+     {/* You need to import Calendar from lucide-react at the top */}
+     <Calendar size={20} /> 
+  </div>
+  Schedule a Meeting
+</a>
               <textarea name="message" value={formData.message} onChange={handleChange} required rows="3" placeholder="Message" className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 outline-none focus:border-gold transition-all"></textarea>
               <button type="submit" disabled={status === 'loading'} className="w-full py-4 bg-oxford dark:bg-gold dark:text-oxford text-white font-bold rounded-lg hover:bg-gray-800 transition-all flex justify-center items-center gap-2 disabled:opacity-70">{status === 'loading' ? <Loader2 className="animate-spin" /> : "Send Message"}</button>
            </form>
