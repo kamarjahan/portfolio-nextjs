@@ -26,3 +26,20 @@ body {
   background: #64748B;
   border-radius: 4px;
 }
+
+/* Market Ticker Animation */
+@keyframes scroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-ticker {
+  animation: scroll 25s linear infinite;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* Pause on hover so people can read it */
+.animate-ticker:hover {
+  animation-play-state: paused;
+}

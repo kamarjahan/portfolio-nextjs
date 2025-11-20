@@ -1,5 +1,5 @@
 "use client";
-
+import MarketTicker from './MarketTicker';
 import React, { useState, useEffect } from 'react';
 import { 
   Download, Send, Linkedin, Github, Instagram, Mail, 
@@ -9,10 +9,19 @@ import {
 import { db } from '../firebase'; 
 import { collection, addDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 
+
 export default function Portfolio() {
   const [text, setText] = useState('');
   const fullText = "Finance Student. Tech Enthusiast. Future CA.";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  return (
+    <main className="min-h-screen bg-slate-light text-oxford overflow-x-hidden relative">
+      
+      <MarketTicker /> {/* <--- ADD THIS HERE AT THE TOP */}
+      
+      {/* ... Request Modal ... */}
+      {/* ... Navbar ... */}
 
   // --- DATABASE DATA ---
   const [projects, setProjects] = useState([]);
