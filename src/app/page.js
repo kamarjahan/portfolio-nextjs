@@ -282,29 +282,6 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* --- NEW: INSIGHTS SECTION --- */}
-      <section id="insights" className="py-24 bg-white dark:bg-slate-card/50">
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-oxford dark:text-white text-center mb-12">Insights & Updates</h2>
-          {blogs.length === 0 ? <p className="text-center text-slate-400">No articles published yet.</p> : (
-            <div className="grid md:grid-cols-3 gap-8">
-              {blogs.map((blog) => (
-                <div key={blog.id} onClick={() => setReadBlog(blog)} className="bg-slate-light dark:bg-slate-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-md transition-all cursor-pointer group">
-                  {blog.imageUrl && <img src={blog.imageUrl} className="w-full h-48 object-cover rounded-xl mb-4" />}
-                  <div className="flex justify-between items-center text-xs text-slate-400 mb-2">
-                    <span>{blog.category}</span>
-                    <span>{blog.readTime}</span>
-                  </div>
-                  <h3 className="font-bold text-lg text-oxford dark:text-white mb-2 group-hover:text-gold transition-colors">{blog.title}</h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3">{blog.content}</p>
-                  <div className="mt-4 flex items-center gap-2 text-sm font-bold text-oxford dark:text-gold">Read Article <ExternalLink size={14}/></div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
       {/* ROADMAP */}
       <section id="roadmap" className="py-24 bg-slate-light dark:bg-slate-dark relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-6">
@@ -346,6 +323,29 @@ export default function Portfolio() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* --- NEW: INSIGHTS SECTION --- */}
+      <section id="insights" className="py-24 bg-white dark:bg-slate-card/50">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-oxford dark:text-white text-center mb-12">Insights & Updates</h2>
+          {blogs.length === 0 ? <p className="text-center text-slate-400">No articles published yet.</p> : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {blogs.map((blog) => (
+                <div key={blog.id} onClick={() => setReadBlog(blog)} className="bg-slate-light dark:bg-slate-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-md transition-all cursor-pointer group">
+                  {blog.imageUrl && <img src={blog.imageUrl} className="w-full h-48 object-cover rounded-xl mb-4" />}
+                  <div className="flex justify-between items-center text-xs text-slate-400 mb-2">
+                    <span>{blog.category}</span>
+                    <span>{blog.readTime}</span>
+                  </div>
+                  <h3 className="font-bold text-lg text-oxford dark:text-white mb-2 group-hover:text-gold transition-colors">{blog.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3">{blog.content}</p>
+                  <div className="mt-4 flex items-center gap-2 text-sm font-bold text-oxford dark:text-gold">Read Article <ExternalLink size={14}/></div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
