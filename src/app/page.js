@@ -5,11 +5,11 @@ import React, { useState, useEffect } from 'react';
 import { 
   Download, Send, Linkedin, Github, Instagram, Mail, 
   ExternalLink, Code, CheckCircle, Loader2, Award, Menu, X, FileText, 
-  QrCode, XCircle, Moon, Sun, Calendar
+  QrCode, XCircle, Moon, Sun, Calendar, BookOpen
 } from 'lucide-react';
 
 import { db } from '../firebase'; 
-import { collection, addDoc, getDocs, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, serverTimestamp, query, orderBy } from 'firebase/firestore';
 import MarketTicker from './MarketTicker';
 
 export default function Portfolio() {
@@ -24,10 +24,12 @@ export default function Portfolio() {
   const [projects, setProjects] = useState([]);
   const [achievements, setAchievements] = useState([]);
   const [roadmap, setRoadmap] = useState([]);
+  const [blogs, setBlogs] = useState([]);
 
   // Modals State
   const [requestModal, setRequestModal] = useState(null); 
   const [showBizCard, setShowBizCard] = useState(false);
+  const [readBlog, setReadBlog] = useState(null); // NEW: Blog Reader Modal
 
   const [contactInfo, setContactInfo] = useState('');
   const [reqStatus, setReqStatus] = useState('idle');
@@ -61,7 +63,11 @@ export default function Portfolio() {
 
       const roadSnap = await getDocs(collection(db, "roadmap"));
       setRoadmap(roadSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+
+      const blogSnap = await getDocs(collection(db, "blogs"));
+      setBlogs(blogSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     };
+
     fetchAll();
 
     return () => clearInterval(typing);
@@ -105,6 +111,27 @@ export default function Portfolio() {
       
       {/* 1. MARKET TICKER */}
       <MarketTicker onShowID={() => setShowBizCard(true)} />
+
+      {/* --- BLOG READER MODAL --- */}
+      {readBlog && (
+        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-card rounded-2xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto relative animate-fade-up p-8">
+            <button onClick={() => setReadBlog(null)} className="absolute top-4 right-4 text-slate-400 hover:text-red-500 z-10"><XCircle size={28} /></button>
+            
+            <span className="text-xs font-bold text-gold uppercase tracking-widest">{readBlog.category}</span>
+            <h2 className="text-3xl font-bold mt-2 mb-4 text-oxford dark:text-white">{readBlog.title}</h2>
+            <div className="flex items-center gap-4 text-xs text-slate-400 mb-6 pb-6 border-b dark:border-slate-700">
+               <span>{readBlog.date?.seconds ? new Date(readBlog.date.seconds * 1000).toLocaleDateString() : 'Recently'}</span>
+               <span>•</span>
+               <span>{readBlog.readTime}</span>
+            </div>
+            {readBlog.imageUrl && <img src={readBlog.imageUrl} className="w-full h-64 object-cover rounded-xl mb-6" />}
+            <div className="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
+              {readBlog.content}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* --- DIGITAL BUSINESS CARD MODAL --- */}
       {showBizCard && (
@@ -167,6 +194,7 @@ export default function Portfolio() {
             <a href="#achievements" className="hover:text-gold transition-colors">Achievements</a>
             <a href="#roadmap" className="hover:text-gold transition-colors">Goals</a>
             <a href="#projects" className="hover:text-gold transition-colors">Projects</a>
+            <a href="#insights" className="hover:text-gold transition-colors">Blogs</a>
             
             {/* DARK MODE TOGGLE */}
             <button onClick={toggleTheme} className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-oxford dark:text-gold hover:scale-110 transition-all">
@@ -246,6 +274,29 @@ export default function Portfolio() {
                   <button onClick={() => setRequestModal(item.title)} className="mt-auto w-full py-3 border-2 border-oxford dark:border-gold text-oxford dark:text-gold rounded-lg font-bold hover:bg-oxford hover:text-white dark:hover:bg-gold dark:hover:text-oxford transition-all flex items-center justify-center gap-2">
                     <FileText size={18} /> Request Certificate
                   </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* --- NEW: INSIGHTS SECTION --- */}
+      <section id="insights" className="py-24 bg-white dark:bg-slate-card/50">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-oxford dark:text-white text-center mb-12">Insights & Updates</h2>
+          {blogs.length === 0 ? <p className="text-center text-slate-400">No articles published yet.</p> : (
+            <div className="grid md:grid-cols-3 gap-8">
+              {blogs.map((blog) => (
+                <div key={blog.id} onClick={() => setReadBlog(blog)} className="bg-slate-light dark:bg-slate-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-md transition-all cursor-pointer group">
+                  {blog.imageUrl && <img src={blog.imageUrl} className="w-full h-48 object-cover rounded-xl mb-4" />}
+                  <div className="flex justify-between items-center text-xs text-slate-400 mb-2">
+                    <span>{blog.category}</span>
+                    <span>{blog.readTime}</span>
+                  </div>
+                  <h3 className="font-bold text-lg text-oxford dark:text-white mb-2 group-hover:text-gold transition-colors">{blog.title}</h3>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3">{blog.content}</p>
+                  <div className="mt-4 flex items-center gap-2 text-sm font-bold text-oxford dark:text-gold">Read Article <ExternalLink size={14}/></div>
                 </div>
               ))}
             </div>
