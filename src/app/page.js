@@ -3,18 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Download, Send, Linkedin, Github, Instagram, Mail, 
-  ChevronRight, Award, Loader2, CheckCircle 
+  ExternalLink, Code, CheckCircle, Loader2, Award 
 } from 'lucide-react';
 
-// --- NEW: Import Firebase tools ---
 import { db } from '../firebase'; 
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 
 export default function Portfolio() {
-  // --- Typewriter Effect ---
   const [text, setText] = useState('');
   const fullText = "Finance Student. Tech Enthusiast. Future CA.";
-  
+  const [projects, setProjects] = useState([]);
+
   useEffect(() => {
     let i = 0;
     const typing = setInterval(() => {
@@ -22,39 +21,30 @@ export default function Portfolio() {
       i++;
       if (i > fullText.length) clearInterval(typing);
     }, 100);
+
+    const fetchProjects = async () => {
+      const snapshot = await getDocs(collection(db, "projects"));
+      setProjects(snapshot.docs.map(d => ({ id: d.id, ...d.data() })));
+    };
+    fetchProjects();
+
     return () => clearInterval(typing);
   }, []);
 
-  // --- NEW: Form Logic ---
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle'); // 'idle', 'loading', 'success', 'error'
+  const [status, setStatus] = useState('idle');
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
-
     try {
-      // 1. Send data to Firebase "messages" collection
-      await addDoc(collection(db, "messages"), {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-        timestamp: serverTimestamp(), // Saves the exact time
-      });
-
-      // 2. Success! Clear form
+      await addDoc(collection(db, "messages"), { ...formData, timestamp: serverTimestamp() });
       setStatus('success');
       setFormData({ name: '', email: '', message: '' });
-
-      // Reset status after 3 seconds
       setTimeout(() => setStatus('idle'), 3000);
-
     } catch (error) {
-      console.error("Error sending message: ", error);
       setStatus('error');
     }
   };
@@ -62,24 +52,17 @@ export default function Portfolio() {
   return (
     <main className="min-h-screen bg-slate-light text-oxford overflow-x-hidden">
       
-      {/* --- NAVBAR --- */}
       <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <h1 className="text-2xl font-extrabold tracking-tight text-oxford">
             Kamar<span className="text-gold">Jahan</span>.in
           </h1>
-          <div className="hidden md:flex gap-6 text-sm font-medium text-slate-gray">
-            <a href="#about" className="hover:text-oxford transition-colors">About</a>
-            <a href="#skills" className="hover:text-oxford transition-colors">Skills</a>
-            <a href="#roadmap" className="hover:text-oxford transition-colors">Roadmap</a>
-          </div>
           <a href="#contact" className="px-5 py-2 bg-oxford text-white rounded-full hover:bg-gold transition-all shadow-lg text-sm font-bold">
             Hire Me
           </a>
         </div>
       </nav>
 
-      {/* --- HERO SECTION --- */}
       <section className="pt-32 pb-20 px-6 max-w-6xl mx-auto flex flex-col-reverse md:flex-row items-center gap-12">
         <div className="flex-1 text-center md:text-left space-y-6 animate-fade-up">
           <p className="text-gold font-bold tracking-widest uppercase text-xs">Welcome to my Portfolio</p>
@@ -104,7 +87,6 @@ export default function Portfolio() {
             </a>
           </div>
         </div>
-
         <div className="flex-1 flex justify-center relative">
           <div className="absolute w-80 h-80 bg-blue-100 rounded-full blur-3xl -z-10 top-10 animate-pulse-slow"></div>
           <div className="w-64 h-64 md:w-96 md:h-96 bg-gray-200 rounded-full border-8 border-white shadow-2xl overflow-hidden animate-float relative">
@@ -113,7 +95,6 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* --- ABOUT SECTION --- */}
       <section id="about" className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
           <div className="space-y-6">
@@ -121,8 +102,6 @@ export default function Portfolio() {
             <p className="text-slate-gray text-lg leading-loose">
               I am a dedicated student at <strong>NIOS Senior Secondary</strong> with a unique edge. 
               Unlike traditional finance students, I have deep technical expertise in <strong>Web Development</strong> and <strong>Microsoft Office</strong>.
-              <br/><br/>
-              My goal is to become a <strong>Chartered Accountant (CA)</strong> who understands the technology that drives modern finance.
             </p>
             <div className="pt-4 border-t border-gray-100">
                <p className="font-serif italic text-2xl text-oxford">Muhammad Kamar Jahan</p>
@@ -137,76 +116,53 @@ export default function Portfolio() {
              </div>
              <h3 className="text-xl font-bold text-oxford">Course on Computer Concepts</h3>
              <p className="text-slate-gray">Issued by CDAC • 2024</p>
-             <div className="mt-6 flex items-center text-gold font-bold text-sm group-hover:gap-2 transition-all">
-                View Credential <ChevronRight size={16} />
-             </div>
           </div>
         </div>
       </section>
 
-      {/* --- SKILLS SECTION --- */}
-      <section id="skills" className="py-24 bg-slate-light">
-        <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-bold text-oxford mb-12">Technical Proficiency</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-sm">
-              <h3 className="text-sm font-bold text-slate-gray uppercase tracking-widest mb-6">Finance & Office</h3>
-              <div className="flex flex-wrap justify-center gap-3">
-                {["Microsoft Excel (Expert)", "Tally Prime", "Accounting", "Data Analysis", "MS Word"].map((s) => (
-                  <span key={s} className="px-4 py-2 bg-slate-light border border-gray-200 rounded-lg text-oxford font-medium text-sm">
-                    {s}
-                  </span>
-                ))}
-              </div>
+      {/* --- PROJECTS SECTION --- */}
+      <section id="projects" className="py-24 bg-slate-light">
+        <div className="max-w-6xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-oxford text-center mb-12">Featured Projects</h2>
+          
+          {projects.length === 0 ? (
+             <div className="text-center text-slate-400">
+                <p>Loading Projects from Admin Panel...</p>
+             </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {projects.map((proj) => (
+                <div key={proj.id} className="bg-white p-6 rounded-2xl shadow-md border border-gray-100 hover:-translate-y-2 transition-all duration-300 flex flex-col">
+                  
+                  {/* IF IMAGE EXISTS, SHOW IT */}
+                  {proj.imageUrl ? (
+                    <div className="w-full h-48 mb-4 overflow-hidden rounded-lg bg-gray-100">
+                      <img src={proj.imageUrl} alt={proj.title} className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 mb-4">
+                       <div className="p-2 bg-blue-50 rounded-lg text-oxford"><Code size={20} /></div>
+                    </div>
+                  )}
+
+                  <h3 className="font-bold text-xl text-oxford mb-2">{proj.title}</h3>
+                  <p className="text-slate-600 text-sm mb-6 line-clamp-3">{proj.desc}</p>
+                  
+                  <div className="flex items-center justify-between mt-auto">
+                     <span className="text-xs font-bold text-gold bg-gold/10 px-3 py-1 rounded-full">{proj.tech}</span>
+                     {proj.link && (
+                       <a href={proj.link} target="_blank" className="flex items-center gap-1 text-sm font-bold text-oxford hover:text-gold transition-colors">
+                         View <ExternalLink size={16} />
+                       </a>
+                     )}
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="bg-white p-8 rounded-2xl shadow-sm">
-              <h3 className="text-sm font-bold text-slate-gray uppercase tracking-widest mb-6">Development</h3>
-              <div className="flex flex-wrap justify-center gap-3">
-                {["React.js & Next.js", "Firebase Auth & DB", "HTML5 / CSS3", "Tailwind CSS", "Git / GitHub"].map((s) => (
-                  <span key={s} className="px-4 py-2 bg-slate-light border border-gray-200 rounded-lg text-oxford font-medium text-sm">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
-      {/* --- ROADMAP SECTION --- */}
-      <section id="roadmap" className="py-24 bg-white relative overflow-hidden">
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl font-bold text-oxford text-center mb-16">My Journey</h2>
-          <div className="relative border-l-2 border-gray-200 ml-6 md:ml-1/2 space-y-12">
-             <div className="relative pl-8 md:pl-0 md:flex md:flex-row-reverse items-center justify-between w-full group">
-                <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-[9px] w-5 h-5 bg-oxford rounded-full border-4 border-white shadow-md z-10"></div>
-                <div className="md:w-[45%] bg-slate-light p-6 rounded-xl border border-gray-100 shadow-sm group-hover:shadow-md transition-all">
-                   <span className="text-xs font-bold text-slate-gray">2024 (Completed)</span>
-                   <h4 className="text-lg font-bold text-oxford">CDAC Certification</h4>
-                   <p className="text-sm text-slate-500">Mastered Computer Concepts & Web Basics.</p>
-                </div>
-             </div>
-             <div className="relative pl-8 md:pl-0 md:flex items-center justify-between w-full group">
-                <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-[9px] w-5 h-5 bg-gold rounded-full border-4 border-white shadow-lg animate-pulse z-10"></div>
-                <div className="md:w-[45%] bg-white p-6 rounded-xl border-2 border-gold shadow-lg transform md:text-right">
-                   <span className="text-xs font-bold text-gold">Present</span>
-                   <h4 className="text-lg font-bold text-oxford">NIOS Senior Secondary</h4>
-                   <p className="text-sm text-slate-500">Commerce Stream. Building the foundation.</p>
-                </div>
-             </div>
-             <div className="relative pl-8 md:pl-0 md:flex md:flex-row-reverse items-center justify-between w-full opacity-70 hover:opacity-100 transition-opacity">
-                <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-[9px] w-5 h-5 bg-white border-4 border-gray-300 rounded-full z-10"></div>
-                <div className="md:w-[45%] p-6 rounded-xl border border-dashed border-gray-300">
-                   <span className="text-xs font-bold text-slate-gray">2026 (Target)</span>
-                   <h4 className="text-lg font-bold text-oxford">CA Foundation</h4>
-                   <p className="text-sm text-slate-500">Entering the world of Professional Finance.</p>
-                </div>
-             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- CONTACT SECTION (UPDATED) --- */}
       <section id="contact" className="py-24 bg-oxford text-white">
         <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12">
            <div>
@@ -216,55 +172,15 @@ export default function Portfolio() {
                  <div className="flex items-center gap-4 text-lg hover:text-gold transition-colors cursor-pointer">
                     <Mail /> contact@kamarjahan.in
                  </div>
-                 <div className="flex gap-4 pt-4">
-                    <Linkedin className="hover:text-gold cursor-pointer transition-colors" />
-                    <Instagram className="hover:text-gold cursor-pointer transition-colors" />
-                    <Github className="hover:text-gold cursor-pointer transition-colors" />
-                 </div>
               </div>
            </div>
 
            <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl text-oxford shadow-2xl space-y-4">
-              <input 
-                name="name" 
-                value={formData.name} 
-                onChange={handleChange} 
-                required 
-                type="text" 
-                placeholder="Your Name" 
-                className="w-full p-4 bg-slate-50 rounded-lg border border-gray-200 outline-none focus:border-gold transition-all" 
-              />
-              <input 
-                name="email" 
-                value={formData.email} 
-                onChange={handleChange} 
-                required 
-                type="email" 
-                placeholder="Your Email" 
-                className="w-full p-4 bg-slate-50 rounded-lg border border-gray-200 outline-none focus:border-gold transition-all" 
-              />
-              <textarea 
-                name="message" 
-                value={formData.message} 
-                onChange={handleChange} 
-                required 
-                rows="3" 
-                placeholder="Message" 
-                className="w-full p-4 bg-slate-50 rounded-lg border border-gray-200 outline-none focus:border-gold transition-all"
-              ></textarea>
-              
-              <button 
-                type="submit" 
-                disabled={status === 'loading'}
-                className="w-full py-4 bg-oxford text-white font-bold rounded-lg hover:bg-gray-800 transition-all flex justify-center items-center gap-2 disabled:opacity-70"
-              >
-                 {status === 'loading' ? (
-                   <> <Loader2 className="animate-spin" /> Sending... </>
-                 ) : status === 'success' ? (
-                   <> <CheckCircle className="text-green-400" /> Sent Successfully! </>
-                 ) : (
-                   <> <Send size={18} /> Send Message </>
-                 )}
+              <input name="name" value={formData.name} onChange={handleChange} required type="text" placeholder="Your Name" className="w-full p-4 bg-slate-50 rounded-lg border border-gray-200 outline-none focus:border-gold transition-all" />
+              <input name="email" value={formData.email} onChange={handleChange} required type="email" placeholder="Your Email" className="w-full p-4 bg-slate-50 rounded-lg border border-gray-200 outline-none focus:border-gold transition-all" />
+              <textarea name="message" value={formData.message} onChange={handleChange} required rows="3" placeholder="Message" className="w-full p-4 bg-slate-50 rounded-lg border border-gray-200 outline-none focus:border-gold transition-all"></textarea>
+              <button type="submit" disabled={status === 'loading'} className="w-full py-4 bg-oxford text-white font-bold rounded-lg hover:bg-gray-800 transition-all flex justify-center items-center gap-2 disabled:opacity-70">
+                 {status === 'loading' ? <Loader2 className="animate-spin" /> : status === 'success' ? <CheckCircle className="text-green-400" /> : <><Send size={18} /> Send Message</>}
               </button>
            </form>
         </div>
