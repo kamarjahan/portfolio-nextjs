@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class', // <--- THIS IS THE MAGIC LINE
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -13,6 +14,8 @@ module.exports = {
         slate: {
           light: "#F8FAFC",
           gray: "#64748B",
+          dark: "#020617", // New super dark color for background
+          card: "#1E293B"  // New dark color for cards
         },
       },
       animation: {
