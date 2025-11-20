@@ -213,7 +213,7 @@ export default function Portfolio() {
             <a href="/resume.pdf" download="Kamar_Jahan_Resume.pdf" className="px-8 py-3 bg-oxford dark:bg-gold dark:text-oxford text-white rounded-lg shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-2 font-bold cursor-pointer">
               <Download size={18} /> Download Resume
             </a>
-            <DonationButton />
+            
             <a href="#contact" className="px-8 py-3 border-2 border-oxford dark:border-white text-oxford dark:text-white rounded-lg hover:bg-oxford hover:text-white transition-all flex items-center justify-center gap-2 font-bold">
               Contact Me
             </a>
@@ -307,6 +307,7 @@ export default function Portfolio() {
               <textarea name="message" value={formData.message} onChange={handleChange} required rows="3" placeholder="Message" className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 outline-none focus:border-gold transition-all"></textarea>
               <button type="submit" disabled={status === 'loading'} className="w-full py-4 bg-oxford dark:bg-gold dark:text-oxford text-white font-bold rounded-lg hover:bg-gray-800 transition-all flex justify-center items-center gap-2 disabled:opacity-70">{status === 'loading' ? <Loader2 className="animate-spin" /> : "Send Message"}</button>
            </form>
+           <DonationButton />
         </div>
       </section>
 
