@@ -29,6 +29,7 @@ export default function Portfolio() {
   const [reqStatus, setReqStatus] = useState('idle');
 
   useEffect(() => {
+    // Typewriter
     let i = 0;
     const typing = setInterval(() => {
       setText(fullText.slice(0, i));
@@ -36,15 +37,19 @@ export default function Portfolio() {
       if (i > fullText.length) clearInterval(typing);
     }, 100);
 
+    // Fetch Data
     const fetchAll = async () => {
       const projSnap = await getDocs(collection(db, "projects"));
       setProjects(projSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+
       const achieveSnap = await getDocs(collection(db, "achievements"));
       setAchievements(achieveSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+
       const roadSnap = await getDocs(collection(db, "roadmap"));
       setRoadmap(roadSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     };
     fetchAll();
+
     return () => clearInterval(typing);
   }, []);
 
@@ -138,7 +143,7 @@ export default function Portfolio() {
         </div>
       )}
 
-      {/* NAVBAR (Cleaned up) */}
+      {/* NAVBAR */}
       <nav className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <h1 className="text-2xl font-extrabold tracking-tight text-oxford">
@@ -148,6 +153,7 @@ export default function Portfolio() {
             <a href="#home" className="hover:text-gold transition-colors">Home</a>
             <a href="#about" className="hover:text-gold transition-colors">About</a>
             <a href="#achievements" className="hover:text-gold transition-colors">Achievements</a>
+            <a href="#roadmap" className="hover:text-gold transition-colors">Goals</a>
             <a href="#projects" className="hover:text-gold transition-colors">Projects</a>
             <a href="/admin" className="text-slate-300 hover:text-oxford">Admin</a>
           </div>
@@ -159,6 +165,7 @@ export default function Portfolio() {
           <div className="md:hidden bg-white border-t border-gray-100 p-4 flex flex-col gap-4 font-bold shadow-xl">
             <a href="#home" onClick={()=>setMobileMenuOpen(false)}>Home</a>
             <a href="#achievements" onClick={()=>setMobileMenuOpen(false)}>Achievements</a>
+            <a href="#roadmap" onClick={()=>setMobileMenuOpen(false)}>Goals</a>
             <a href="#projects" onClick={()=>setMobileMenuOpen(false)}>Projects</a>
             <a href="/admin" className="text-gold">Admin Panel</a>
           </div>
@@ -221,9 +228,31 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* ROADMAP & PROJECTS & CONTACT (Already included in the logic above) */}
-      {/* (Skipped repeating full sections for brevity, but they are in the logic structure - paste full file from previous step if needed, just changed Navbar and Ticker here) */}
+      {/* ROADMAP / GOALS */}
+      <section id="roadmap" className="py-24 bg-white relative overflow-hidden">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-oxford text-center mb-16">My Goals & Roadmap</h2>
+          <div className="relative border-l-2 border-gray-200 ml-6 md:ml-1/2 space-y-12">
+            {roadmap.map((item, index) => (
+               <div key={item.id} className={`relative pl-8 md:pl-0 md:flex ${index % 2 === 0 ? 'md:flex-row-reverse' : ''} items-center justify-between w-full group`}>
+                 <div className={`absolute -left-[9px] md:left-1/2 md:-translate-x-[9px] w-5 h-5 rounded-full border-4 border-white shadow-md z-10 
+                   ${item.status === 'completed' ? 'bg-oxford' : item.status === 'current' ? 'bg-gold animate-pulse' : 'bg-gray-300'}`}>
+                 </div>
+                 <div className={`md:w-[45%] p-6 rounded-xl border shadow-sm transition-all
+                    ${item.status === 'current' ? 'bg-white border-2 border-gold shadow-lg' : 'bg-slate-light border-gray-100'}`}>
+                    <span className={`text-xs font-bold uppercase ${item.status === 'current' ? 'text-gold' : 'text-slate-500'}`}>
+                      {item.status === 'completed' ? 'Completed' : item.status === 'current' ? 'Present' : 'Target'}
+                    </span>
+                    <h4 className="text-lg font-bold text-oxford">{item.title}</h4>
+                    <p className="text-sm text-slate-500">{item.org} • {item.year}</p>
+                 </div>
+               </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* PROJECTS */}
       <section id="projects" className="py-24 bg-slate-light">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-oxford text-center mb-12">Featured Projects</h2>
@@ -243,6 +272,7 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* CONTACT */}
       <section id="contact" className="py-24 bg-oxford text-white">
         <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12">
            <div><h2 className="text-4xl font-bold mb-4">Let's Connect</h2><div className="space-y-4"><div className="flex items-center gap-4 text-lg hover:text-gold transition-colors cursor-pointer"><Mail /> contact@kamarjahan.in</div></div></div>
