@@ -1,5 +1,6 @@
 "use client";
 
+import DonationButton from './DonationButton';
 import React, { useState, useEffect } from 'react';
 import { 
   Download, Send, Linkedin, Github, Instagram, Mail, 
@@ -211,6 +212,7 @@ export default function Portfolio() {
           <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start pt-4">
             <a href="/resume.pdf" download="Kamar_Jahan_Resume.pdf" className="px-8 py-3 bg-oxford dark:bg-gold dark:text-oxford text-white rounded-lg shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-2 font-bold cursor-pointer">
               <Download size={18} /> Download Resume
+              <DonationButton />
             </a>
             <a href="#contact" className="px-8 py-3 border-2 border-oxford dark:border-white text-oxford dark:text-white rounded-lg hover:bg-oxford hover:text-white transition-all flex items-center justify-center gap-2 font-bold">
               Contact Me
