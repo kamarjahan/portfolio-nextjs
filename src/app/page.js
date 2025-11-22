@@ -308,14 +308,15 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* PROJECTS */}
+      {/* PROJECTS SECTION (HOME VERSION - LIMITED TO 2) */}
       <section id="projects" className="py-24 bg-white dark:bg-slate-card/50">
         <div className="max-w-6xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-oxford dark:text-white text-center mb-12">Featured Projects</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((proj) => (
-              <div key={proj.id} className="bg-white dark:bg-slate-card p-6 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 hover:-translate-y-2 transition-all flex flex-col">
-                {proj.imageUrl && <div className="w-full h-48 mb-4 overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-900"><img src={proj.imageUrl} className="w-full h-full object-cover" /></div>}
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* SLICE(0, 2) SHOWS ONLY THE FIRST 2 PROJECTS */}
+            {projects.slice(0, 2).map((proj) => (
+              <div key={proj.id} className="bg-slate-light dark:bg-slate-card p-6 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 hover:-translate-y-2 transition-all flex flex-col">
+                {proj.imageUrl && <div className="w-full h-64 mb-4 overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-900"><img src={proj.imageUrl} className="w-full h-full object-cover" /></div>}
                 <h3 className="font-bold text-xl text-oxford dark:text-white mb-2">{proj.title}</h3>
                 <p className="text-slate-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">{proj.desc}</p>
                 <div className="flex items-center justify-between mt-auto">
@@ -324,6 +325,16 @@ export default function Portfolio() {
                 </div>
               </div>
             ))}
+          </div>
+          
+          {/* SHOW MORE BUTTON */}
+          <div className="text-center mt-12">
+            <a 
+              href="/projects" 
+              className="inline-flex items-center gap-2 px-8 py-3 border-2 border-oxford dark:border-white text-oxford dark:text-white font-bold rounded-full hover:bg-oxford hover:text-white dark:hover:bg-white dark:hover:text-oxford transition-all"
+            >
+              Show All Projects <ExternalLink size={18} />
+            </a>
           </div>
         </div>
       </section>
