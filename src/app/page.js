@@ -14,7 +14,7 @@ import MarketTicker from './MarketTicker';
 
 export default function Portfolio() {
   const [text, setText] = useState('');
-  const fullText = "Finance Student. Tech Enthusiast. Future CA.";
+  const fullText = "Commerce Student. Tech Enthusiast. Digital Innovator.";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Dark Mode State
@@ -247,7 +247,7 @@ export default function Portfolio() {
              <p className="text-xl text-slate-gray dark:text-slate-400 font-medium border-r-4 border-gold inline-block pr-2">{text}</p>
           </div>
           <p className="text-slate-gray dark:text-slate-400 text-lg max-w-lg mx-auto md:mx-0 leading-relaxed">
-            I bridge the gap between <strong>Financial Discipline</strong> and <strong>Technological Innovation</strong>. 
+            Combining <strong>Financial Literacy</strong> with <strong>Modern Technology</strong> to build smarter, efficient digital solutions. 
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start pt-4">
             <a href="/resume.pdf" download="Kamar_Jahan_Resume.pdf" className="px-8 py-3 bg-oxford dark:bg-gold dark:text-oxford text-white rounded-lg shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-2 font-bold cursor-pointer">
