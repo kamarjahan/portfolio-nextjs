@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Download, Send, Linkedin, Github, Instagram, Mail, 
   ExternalLink, Code, CheckCircle, Loader2, Award, Menu, X, FileText, 
-  QrCode, XCircle, Moon, Sun, Calendar, BookOpen
+  QrCode, XCircle, Moon, Sun, Calendar, BookOpen, Facebook, Twitter, Music
 } from 'lucide-react';
 
 import { db } from '../firebase'; 
@@ -344,7 +344,40 @@ export default function Portfolio() {
       {/* CONTACT */}
       <section id="contact" className="py-24 bg-oxford dark:bg-slate-950 text-white">
         <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-12">
-           <div><h2 className="text-4xl font-bold mb-4">Let's Connect</h2><div className="space-y-4"><div className="flex items-center gap-4 text-lg hover:text-gold transition-colors cursor-pointer"><Mail /> contact@kamarjahan.in</div></div></div>
+           <div className="space-y-4">
+                 <div className="flex items-center gap-4 text-lg hover:text-gold transition-colors cursor-pointer">
+                    <Mail /> contact@kamarjahan.in
+                 </div>
+                 
+                 {/* SOCIAL MEDIA LINKS */}
+                 <div className="flex gap-5 pt-6">
+                    {/* Facebook */}
+                    <a href="https://facebook.com/kamarjahan" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-blue-600 hover:text-white transition-all hover:-translate-y-1">
+                      <Facebook size={20} />
+                    </a>
+
+                    {/* X (Formerly Twitter) */}
+                    <a href="https://x.com/kamarjahan" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-black hover:text-white transition-all hover:-translate-y-1">
+                      <Twitter size={20} />
+                    </a>
+
+                    {/* Instagram */}
+                    <a href="https://instagram.com/kammu.in" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-pink-600 hover:text-white transition-all hover:-translate-y-1">
+                      <Instagram size={20} />
+                    </a>
+
+                    {/* Spotify (Using Music Icon) */}
+                    <a href="https://open.spotify.com/user/kamarjahan" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1">
+                      <Music size={20} />
+                    </a>
+
+                    {/* Github */}
+                    <a href="https://github.com/kamarjahan" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-gray-700 hover:text-white transition-all hover:-translate-y-1">
+                      <Github size={20} />
+                    </a>
+                 </div>
+              </div>
+
            <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-card p-6 rounded-xl text-oxford dark:text-white shadow-2xl space-y-4">
               <input name="name" value={formData.name} onChange={handleChange} required type="text" placeholder="Your Name" className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 outline-none focus:border-gold transition-all" />
               <input name="email" value={formData.email} onChange={handleChange} required type="email" placeholder="Your Email" className="w-full p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-gray-200 dark:border-slate-700 outline-none focus:border-gold transition-all" />
