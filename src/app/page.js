@@ -191,16 +191,11 @@ export default function Portfolio() {
           
           <div className="hidden md:flex items-center gap-8 text-sm font-bold text-slate-600 dark:text-slate-300">
             <a href="#home" className="hover:text-gold transition-colors">Home</a>
-            <a href="#about" className="hover:text-gold transition-colors">About</a>
+            <a href="#git" className="hover:text-gold transition-colors">About</a>
             <a href="#achievements" className="hover:text-gold transition-colors">Achievements</a>
             <a href="#roadmap" className="hover:text-gold transition-colors">Goals</a>
             <a href="#projects" className="hover:text-gold transition-colors">Projects</a>
-            <button 
-              onClick={() => { setShowBlogs(true); setTimeout(() => document.getElementById('insights')?.scrollIntoView({behavior: 'smooth'}), 100); }} 
-              className="hover:text-gold transition-colors"
-            >
-              Blogs
-            </button>
+            <a href="/insights" className="hover:text-gold transition-colors">Blogs</a>
             
             {/* DARK MODE TOGGLE */}
             <button onClick={toggleTheme} className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-oxford dark:text-gold hover:scale-110 transition-all">
@@ -225,12 +220,8 @@ export default function Portfolio() {
             <a href="#achievements" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Achievements</a>
             <a href="#roadmap" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Goals</a>
             <a href="#projects" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Projects</a>
-            <button 
-              onClick={() => { setShowBlogs(true); setMobileMenuOpen(false); setTimeout(() => document.getElementById('insights')?.scrollIntoView({behavior: 'smooth'}), 100); }} 
-              className="text-left dark:text-white"
-            >
-              Blogs
-            </button>
+            <a href="/insights" className="dark:text-white">Blogs</a>
+            
             <a href="/admin" className="text-gold">Admin Panel</a>
           </div>
         )}
@@ -337,45 +328,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* --- NEW: INSIGHTS SECTION --- */}
-      {showBlogs && (
-        <section id="insights" className="py-24 bg-white dark:bg-slate-card/50 relative animate-fade-up">
-          {/* Close Button */}
-          <button 
-            onClick={() => setShowBlogs(false)} 
-            className="absolute top-8 right-8 text-slate-400 hover:text-red-500 flex items-center gap-2 text-sm font-bold"
-          >
-            Close <XCircle size={20}/>
-          </button>
-
-          <div className="max-w-6xl mx-auto px-6">
-            <h2 className="text-3xl font-bold text-oxford dark:text-white text-center mb-12">Insights & Updates</h2>
-            
-            {/* ... existing blog list code ... */}
-            {blogs.length === 0 ? (
-              <div className="text-center py-12 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl">
-                 <p className="text-slate-400">No articles published yet.</p>
-                 <p className="text-xs text-slate-300 mt-2">Go to Admin Panel to write your first post.</p>
-              </div>
-            ) : (
-              <div className="grid md:grid-cols-3 gap-8">
-                {blogs.map((blog) => (
-                  <div key={blog.id} onClick={() => setReadBlog(blog)} className="bg-slate-light dark:bg-slate-card p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 hover:shadow-md transition-all cursor-pointer group flex flex-col h-full">
-                    {blog.imageUrl && <div className="w-full h-48 mb-4 overflow-hidden rounded-xl"><img src={blog.imageUrl} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" /></div>}
-                    <div className="flex justify-between items-center text-xs text-slate-400 mb-3">
-                      <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-2 py-1 rounded uppercase font-bold tracking-wider">{blog.category}</span>
-                      <span>{blog.readTime}</span>
-                    </div>
-                    <h3 className="font-bold text-lg text-oxford dark:text-white mb-2 group-hover:text-gold transition-colors line-clamp-2">{blog.title}</h3>
-                    <p className="text-slate-600 dark:text-slate-400 text-sm line-clamp-3 mb-4 flex-1">{blog.content}</p>
-                    <div className="mt-auto flex items-center gap-2 text-sm font-bold text-oxford dark:text-gold group-hover:translate-x-2 transition-transform">Read Article <ExternalLink size={14}/></div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-      )}
+      
 
       {/* CONTACT */}
       <section id="contact" className="py-24 bg-oxford dark:bg-slate-950 text-white">
