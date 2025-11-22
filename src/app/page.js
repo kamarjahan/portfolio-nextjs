@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   Download, Send, Linkedin, Github, Instagram, Mail, 
   ExternalLink, Code, CheckCircle, Loader2, Award, Menu, X, FileText, 
-  QrCode, XCircle, Moon, Sun, Calendar, BookOpen, Facebook, Twitter, Music
+  QrCode, XCircle, Moon, Sun, Calendar, BookOpen, Facebook, Twitter, Music, Map
 } from 'lucide-react';
 
 import { db } from '../firebase'; 
@@ -374,8 +374,31 @@ export default function Portfolio() {
                     {/* Github */}
                     <a href="https://github.com/kamarjahan" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-gray-700 hover:text-white transition-all hover:-translate-y-1">
                       <Github size={20} />
-                    </a>
+                    </a>          
                  </div>
+                 {/* Quote */}
+                 <div className="pt-5 mt-4 border-t border-gray-50 dark:border-slate-400">
+                    <p className="text-lg font-serif italic text-slate-200 dark:text-slate-250 leading-relaxed">
+                       "Technology is the pen, and Finance is the story. I write both."
+                    </p>
+                    <p className="text-sm font-bold text-gold mt-2">— Kamar Jahan</p>
+                 </div>
+
+                 {/* Location & Status */}
+                 <div className="pt-8 space-y-4">
+                    <div className="flex items-center gap-3 text-slate-600 dark:text-slate-400">
+                       <div className="p-2 bg-slate-100 dark:bg-slate-800 rounded-full text-oxford dark:text-gold">
+                          <Map size={18} />
+                       </div>
+                       <span className="text-sm">Based in India • Available Worldwide</span>
+                    </div>
+                    
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold uppercase tracking-wider rounded-full">
+                       <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                       Open to Opportunities
+                    </div>
+                 </div>
+                 
               </div>
 
            <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-card p-6 rounded-xl text-oxford dark:text-white shadow-2xl space-y-4">
