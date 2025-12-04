@@ -357,7 +357,7 @@ export default function Portfolio() {
                     </a>
 
                     {/* X (Formerly Twitter) */}
-                    <a href="https://x.com/kamarjahan" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-black hover:text-white transition-all hover:-translate-y-1">
+                    <a href="https://x.com/kamarjahan21" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-black hover:text-white transition-all hover:-translate-y-1">
                       <Twitter size={20} />
                     </a>
 
@@ -367,12 +367,12 @@ export default function Portfolio() {
                     </a>
 
                     {/* Spotify (Using Music Icon) */}
-                    <a href="https://open.spotify.com/user/kamarjahan" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1">
+                    <a href="https://music.jachu.xyz" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-green-500 hover:text-white transition-all hover:-translate-y-1">
                       <Music size={20} />
                     </a>
 
                     {/* Github */}
-                    <a href="https://github.com/kamarjahan" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-gray-700 hover:text-white transition-all hover:-translate-y-1">
+                    <a href="https://kamarjahan.in/#contact" target="_blank" className="bg-slate-50 dark:bg-slate-800 p-3 rounded-full text-oxford dark:text-white hover:bg-gray-700 hover:text-white transition-all hover:-translate-y-1">
                       <Github size={20} />
                     </a>          
                  </div>
