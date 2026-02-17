@@ -196,7 +196,7 @@ export default function Portfolio() {
             <a href="#roadmap" className="hover:text-gold transition-colors">Goals</a>
             <a href="#projects" className="hover:text-gold transition-colors">Projects</a>
             <a href="/insights" className="hover:text-gold transition-colors">Blogs</a>
-            <a href="https://kamarjahan.in" className="hover:text-gold transition-colors">Home</a>  
+            <a href="https://v2.kamarjahan.in" className="hover:text-gold transition-colors">version-2</a>  
             
             {/* DARK MODE TOGGLE */}
             <button onClick={toggleTheme} className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-oxford dark:text-gold hover:scale-110 transition-all">
@@ -222,7 +222,7 @@ export default function Portfolio() {
             <a href="#roadmap" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Goals</a>
             <a href="#projects" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Projects</a>
             <a href="/insights" className="dark:text-white">Blogs</a>
-            <a href="https://v2.kamarjahan.in" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Home</a>  
+            <a href="https://v2.kamarjahan.in" onClick={()=>setMobileMenuOpen(false)} className="dark:text-white">Version-2</a>  
             
             <a href="/admin" className="text-gold">Admin Panel</a>
           </div>
