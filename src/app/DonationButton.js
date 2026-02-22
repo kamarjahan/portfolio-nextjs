@@ -7,7 +7,7 @@ export default function DonationButton() {
   return (
     <a 
       // --- PASTE YOUR RAZORPAY LINK HERE ---
-      href="https://rzp.io/rzp/Kamarjahan" 
+      href="https://jachu.xyz/donate" 
       // ------------------------------------
       target="_blank"
       rel="noopener noreferrer"
